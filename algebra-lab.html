@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>آزمایشگاه تعاملی ریاضیات - ضرب عبارات دو جمله‌ای</title>
+  <style>
+    :root{
+      --phet-blue:#00acee;
+      --phet-yellow:#fde047;
+      --phet-red:#ef4444;
+      --phet-purple:#a855f7;
+      --bg:#e5e7eb;
+      --panel-soft:#f8fafc;
+      --math-bg:#f0fdf4;
+      --math-border:#bbf7d0;
+    }
+
+    *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+    body{
+      margin:0;
+      font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg);
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      padding:10px;
+    }
+
+    /* ---------- Splash Screen (Start Page) ---------- */
+    #splash{
+      width:100%;
+      max-width:1100px;
+      border-radius:18px;
+      padding:18px;
+      position:relative;
+      overflow:hidden;
+
+      background:
+        radial-gradient(1200px 600px at 10% 10%, rgba(0,172,238,.35), transparent 55%),
+        radial-gradient(900px 500px at 90% 20%, rgba(168,85,247,.35), transparent 55%),
+        radial-gradient(900px 500px at 50% 95%, rgba(253,224,71,.35), transparent 60%),
+        linear-gradient(135deg, #0b1220 0%, #111827 60%, #0b1220 100%);
+      color:#fff;
+
+      box-shadow:
+        0 18px 45px rgba(0,0,0,.25),
+        inset 0 1px 0 rgba(255,255,255,.12);
+    }
+
+    .float-card{
+      position:absolute;
+      width:260px;
+      height:180px;
+      border-radius:18px;
+      background: linear-gradient(135deg, rgba(255,255,255,.18), rgba(255,255,255,.06));
+      border:1px solid rgba(255,255,255,.22);
+      box-shadow:
+        0 18px 50px rgba(0,0,0,.35),
+        inset 0 1px 0 rgba(255,255,255,.18);
+      backdrop-filter: blur(10px);
+      transform: rotate(-8deg);
+      opacity:.9;
+      pointer-events:none;
+    }
+    .float-card.c1{ top:18px; left:18px; transform: rotate(-10deg); }
+    .float-card.c2{ bottom:18px; right:18px; transform: rotate(10deg); width:280px; height:200px; }
+
+    .splash-inner{
+      position:relative;
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+      align-items:stretch;
+      padding:14px;
+      border-radius:16px;
+
+      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.04));
+      border:1px solid rgba(255,255,255,.18);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.16),
+        inset 0 -1px 0 rgba(0,0,0,.25);
+    }
+
+    .hero{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      padding:18px;
+      border-radius:16px;
+
+      background: linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,.06));
+      border:1px solid rgba(255,255,255,.22);
+      box-shadow:
+        0 16px 40px rgba(0,0,0,.35),
+        inset 0 2px 0 rgba(255,255,255,.18),
+        inset 0 -10px 30px rgba(0,0,0,.22);
+    }
+
+    .title{
+      font-size: clamp(22px, 4vw, 34px);
+      font-weight: 900;
+      letter-spacing: .2px;
+      margin:0;
+      line-height:1.25;
+      text-shadow: 0 8px 22px rgba(0,0,0,.35);
+    }
+
+    .subtitle{
+      margin:0;
+      font-size: clamp(14px, 2.6vw, 18px);
+      color: rgba(255,255,255,.85);
+      line-height:1.7;
+    }
+
+    .designer{
+      margin-top:6px;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+      color: rgba(255,255,255,.82);
+      font-weight:700;
+      font-size: 14px;
+    }
+    .badge{
+      padding:6px 10px;
+      border-radius:999px;
+      background: linear-gradient(135deg, rgba(0,172,238,.25), rgba(168,85,247,.22));
+      border: 1px solid rgba(255,255,255,.18);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.16),
+        0 10px 20px rgba(0,0,0,.25);
+    }
+
+    .feature-row{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:10px;
+    }
+
+    .feature{
+      padding:12px 14px;
+      border-radius:14px;
+      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.04));
+      border:1px solid rgba(255,255,255,.16);
+      box-shadow:
+        0 14px 26px rgba(0,0,0,.25),
+        inset 0 1px 0 rgba(255,255,255,.12);
+      color: rgba(255,255,255,.86);
+      font-size: 13.5px;
+      line-height:1.8;
+    }
+
+    .start-row{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+      padding:12px 14px;
+      border-radius:14px;
+
+      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.04));
+      border:1px solid rgba(255,255,255,.16);
+      box-shadow:
+        0 14px 26px rgba(0,0,0,.25),
+        inset 0 1px 0 rgba(255,255,255,.12);
+    }
+
+    .hint{
+      color: rgba(255,255,255,.80);
+      font-size: 12.5px;
+      line-height:1.8;
+      flex: 1 1 260px;
+    }
+
+    .start-btn{
+      position:relative;
+      border:none;
+      cursor:pointer;
+      padding: 14px 20px;
+      border-radius: 14px;
+      min-width: 160px;
+
+      color:#071018;
+      font-weight: 900;
+      font-size: 15px;
+      letter-spacing:.3px;
+
+      background:
+        radial-gradient(160px 70px at 30% 25%, rgba(255,255,255,.95), rgba(255,255,255,.45) 45%, rgba(255,255,255,.10) 70%),
+        linear-gradient(135deg, rgba(140,240,255,.95), rgba(70,190,255,.88) 40%, rgba(166,122,255,.80));
+      box-shadow:
+        0 18px 40px rgba(0,0,0,.35),
+        inset 0 2px 0 rgba(255,255,255,.75),
+        inset 0 -12px 22px rgba(0,0,0,.18);
+      outline: 1px solid rgba(255,255,255,.35);
+
+      transform: translateZ(0);
+      animation: shaky 2.3s infinite;
+      touch-action: manipulation;
+      user-select:none;
+    }
+    .start-btn::before{
+      content:"";
+      position:absolute;
+      inset:2px;
+      border-radius: 12px;
+      background:
+        linear-gradient(120deg,
+          rgba(255,255,255,.55) 0%,
+          rgba(255,255,255,.10) 35%,
+          rgba(255,255,255,.35) 70%,
+          rgba(255,255,255,.08) 100%);
+      mix-blend-mode: overlay;
+      pointer-events:none;
+    }
+    .start-btn::after{
+      content:"";
+      position:absolute;
+      inset:-18px;
+      background:
+        radial-gradient(120px 60px at 30% 25%, rgba(255,255,255,.22), transparent 60%),
+        radial-gradient(140px 70px at 70% 65%, rgba(0,172,238,.20), transparent 60%);
+      filter: blur(10px);
+      opacity:.85;
+      pointer-events:none;
+    }
+    .start-btn:hover{ filter: brightness(1.03) saturate(1.05); }
+    .start-btn:active{
+      transform: translateY(1px);
+      animation-play-state: paused;
+    }
+
+    @keyframes shaky{
+      0%, 100% { transform: translate(0,0) rotate(0deg); }
+      6% { transform: translate(-1px, 0px) rotate(-0.6deg); }
+      12%{ transform: translate(1px, 0px) rotate(0.6deg); }
+      18%{ transform: translate(-1px, 1px) rotate(-0.4deg); }
+      24%{ transform: translate(1px, -1px) rotate(0.4deg); }
+      30%{ transform: translate(-1px, 0px) rotate(-0.3deg); }
+      36%{ transform: translate(0px, 1px) rotate(0.3deg); }
+      42%{ transform: translate(0px, 0px) rotate(0deg); }
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      .start-btn{ animation:none; }
+    }
+
+    /* ---------- Simulator ---------- */
+    #sim{
+      width:100%; max-width:1000px; background: white; border-radius: 12px;
+      flex-direction:column; gap:12px; padding:15px;
+    }
+
+    .area-display{
+      background:#fff; border:2px solid #ddd; border-radius:8px;
+      display:flex; justify-content:center; align-items:center;
+      min-height:300px; padding:5px; overflow: hidden;
+    }
+    #area-svg{ width:100%; height:auto; max-height:400px; }
+
+    .math-details{
+      background: var(--math-bg); border: 2px solid var(--math-border);
+      border-radius: 8px; padding: 15px; direction:ltr; text-align:left;
+    }
+    .step-line{ font-size:16px; color:#444; border-bottom:1px solid rgba(0,0,0,0.05); padding:3px 0; }
+    .final-line{ font-size:20px; font-weight:900; color:#166534; margin-top:8px; }
+
+    .control-box{ background: var(--panel-soft); border:2px solid #ddd; border-radius:8px; padding:10px; margin-bottom:10px; }
+    .control-title{ font-weight:900; font-size:13px; display:block; border-bottom:1px solid #ccc; padding-bottom:5px; margin-bottom:10px; }
+    .input-row{ display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
+    
+    .counter-tool{ display:flex; align-items:center; border:1px solid #999; border-radius:6px; background:#fff; }
+    .counter-btn{ width:32px; height:32px; border:none; cursor:pointer; font-size:20px; font-weight:bold; background:#eee; }
+    .counter-val{ width:40px; text-align:center; font-weight:bold; }
+
+    .checkbox-group label{ display:flex; align-items:center; gap:8px; font-size:13px; margin:5px 0; font-weight:bold; }
+    .reset-btn{ background:#ff9800; color:white; border:none; padding:12px; border-radius:8px; font-weight:bold; cursor:pointer; width:100%; }
+
+    .label-text{ font-weight:900; font-size:16px; fill:#222; text-anchor:middle; }
+    .dim-text{ font-size:18px; font-weight:900; fill:#444; }
+
+    [hidden] { display: none !important; }
+    body { font-size: 18px; align-items: flex-start; }
+    button { font-family: inherit; }
+    button:focus-visible { outline: 3px solid #0369a1; outline-offset: 2px; }
+    .title { font-size: clamp(26px, 4vw, 36px); }
+    .subtitle, .designer, .feature, .hint, .start-btn { font-size: 18px; }
+    #sim { display: flex; }
+    .sim-header { grid-column: 1 / -1; }
+    .credit { margin: 6px 0 12px; color: #475569; }
+    .mode-picker { display: flex; flex-wrap: wrap; gap: 8px; }
+    .mode-picker button {
+      min-height: 44px; padding: 6px 16px; font-size: 18px; font-weight: bold;
+      background: #f1f5f9; border: 1px solid #94a3b8; color: #0f172a;
+      border-radius: 8px; cursor: pointer;
+    }
+    .mode-picker [aria-pressed="true"] { color: white; background: #075985; border-color: #075985; }
+    .main-content, .side-panel { min-width: 0; }
+    .math-details { overflow-wrap: anywhere; }
+    .step-line { font-size: 18px; }
+    .final-line { font-size: 22px; }
+    .control-title, .checkbox-group label, .reset-btn { font-size: 18px; }
+    .reset-btn { background: #9a4100; }
+    .input-row { gap: 6px; }
+    .counter-tool { flex: none; }
+    .counter-btn { width: 42px; height: 42px; }
+    .counter-val { width: 32px; }
+    .label-text { font-size: 19px; }
+    @media (min-width: 850px) {
+      #sim { display: grid; grid-template-columns: minmax(0, 1fr) 320px; align-items: start; }
+    }
+    @media (max-width: 480px) {
+      #sim, #splash { padding: 10px; }
+      .area-display { min-height: 0; }
+      .math-details { padding: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+    <section id="splash" aria-label="صفحه شروع">
+        <div class="float-card c1"></div>
+        <div class="float-card c2"></div>
+    
+        <div class="splash-inner">
+          <div class="hero">
+            <h1 class="title">به آزمایشگاه تعاملی ریاضیات خوش آمدید</h1>
+            <p class="subtitle"> ضرب دوجمله‌ای‌های یک‌متغیره و دومتغیره با مدل مساحت</p>
+    
+            <div class="designer">
+              <span class="badge">طراح مهسا صالحی</span>
+            </div>
+          </div>
+    
+          <div class="feature-row">
+            <div class="feature">
+              در این آزمایشگاه می‌توانید حاصل‌ضرب جبری دو پرانتز را به روش هندسی (مدل مساحت) بررسی نمایید. تمامی بخش‌ها به صورت تعاملی با تغییر ضرایب تغییر می‌کنند.
+            </div>
+          </div>
+    
+          <div class="start-row">
+            <div class="hint">
+              نکته:  برای دیدن مراحل ضرب، گزینهٔ «حاصل‌ضرب‌های جزئی» را فعال کنید.
+            </div>
+            <button class="start-btn" id="startBtn" type="button">شروع</button>
+          </div>
+        </div>
+      </section>     
+
+  <main id="sim" hidden>
+    <header class="sim-header">
+      <h1 class="title">ضرب دوجمله‌ای‌ها</h1>
+      <p class="credit">طراح مهسا صالحی</p>
+      <div class="mode-picker" role="group" aria-label="نوع عبارت جبری">
+        <button type="button" data-mode="one" aria-pressed="true">یک‌متغیره</button>
+        <button type="button" data-mode="two" aria-pressed="false">دومتغیره</button>
+      </div>
+    </header>
+    <div class="main-content">
+      <div class="area-display">
+        <svg id="area-svg" direction="ltr" role="img" aria-label="مدل مساحت حاصل‌ضرب دوجمله‌ای‌ها" viewBox="0 0 500 400" preserveAspectRatio="xMidYMid meet">
+          <!-- اشیاء SVG توسط جاوااسکریپت مقداردهی می‌شوند -->
+          <rect id="r1" fill="var(--phet-purple)" stroke="#333" stroke-width="1.5" />
+          <rect id="r2" fill="var(--phet-red)" stroke="#333" stroke-width="1.5" />
+          <rect id="r3" fill="var(--phet-yellow)" stroke="#333" stroke-width="1.5" />
+          <rect id="r4" fill="var(--phet-blue)" stroke="#333" stroke-width="1.5" />
+          <text id="l1" class="label-text"></text>
+          <text id="l2" class="label-text"></text>
+          <text id="l3" class="label-text"></text>
+          <text id="l4" class="label-text"></text>
+          <text id="dt1" class="dim-text" text-anchor="middle"></text>
+          <text id="dt2" class="dim-text" text-anchor="middle"></text>
+          <text id="ds1" class="dim-text" text-anchor="end"></text>
+          <text id="ds2" class="dim-text" text-anchor="end"></text>
+        </svg>
+      </div>
+      <div class="math-details" id="math-box"></div>
+    </div>
+
+    <aside class="side-panel">
+      <div class="control-box">
+        <span class="control-title">عمودی <bdi id="factor-h" dir="ltr"></bdi></span>
+        <div class="input-row" data-key="h1">
+          <span id="label-h1">ضریب <bdi>ax</bdi></span>
+          <div class="counter-tool" dir="ltr">
+            <button class="counter-btn" type="button" data-delta="-1">−</button>
+            <output class="counter-val" id="disp-h1">1</output>
+            <button class="counter-btn" type="button" data-delta="1">+</button>
+          </div>
+        </div>
+        <div class="input-row" data-key="h2">
+          <span id="label-h2"></span>
+          <div class="counter-tool" dir="ltr">
+            <button class="counter-btn" type="button" data-delta="-1">−</button>
+            <output class="counter-val" id="disp-h2">2</output>
+            <button class="counter-btn" type="button" data-delta="1">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="control-box">
+        <span class="control-title">افقی <bdi id="factor-w" dir="ltr"></bdi></span>
+        <div class="input-row" data-key="w1">
+          <span id="label-w1">ضریب <bdi>cx</bdi></span>
+          <div class="counter-tool" dir="ltr">
+            <button class="counter-btn" type="button" data-delta="-1">−</button>
+            <output class="counter-val" id="disp-w1">1</output>
+            <button class="counter-btn" type="button" data-delta="1">+</button>
+          </div>
+        </div>
+        <div class="input-row" data-key="w2">
+          <span id="label-w2"></span>
+          <div class="counter-tool" dir="ltr">
+            <button class="counter-btn" type="button" data-delta="-1">−</button>
+            <output class="counter-val" id="disp-w2">3</output>
+            <button class="counter-btn" type="button" data-delta="1">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="control-box checkbox-group">
+        <label><input type="checkbox" id="chk-partial" checked> حاصل‌ضرب‌های جزئی</label>
+        <label><input type="checkbox" id="chk-total" checked> نتیجه نهایی</label>
+        <label><input type="checkbox" id="chk-dims" checked> نمایش ابعاد</label>
+      </div>
+      <button class="reset-btn" type="button" id="reset">بازنشانی</button>
+    </aside>
+  </main>
+
+<script>
+  const byId = id => document.getElementById(id);
+  const defaults = { h1: 1, h2: 2, w1: 1, w2: 3 };
+  const modeSettings = {
+    one: { factors: ['(ax + b)', '(cx + d)'], labels: ['جملهٔ ثابت b', 'جملهٔ ثابت d'], second: '', middle: 'x', last: '' },
+    two: { factors: ['(ax + by)', '(cx + dy)'], labels: ['ضریب by', 'ضریب dy'], second: 'y', middle: 'xy', last: 'y²' }
+  };
+  const states = Object.fromEntries(Object.keys(modeSettings).map(key => [key, {
+    coefficients: { ...defaults }, partial: true, total: true, dims: true
+  }]));
+  const modeButtons = Array.from(document.querySelectorAll('[data-mode]'));
+  const options = ['partial', 'total', 'dims'];
+  let mode = 'one';
+
+  byId('startBtn').addEventListener('click', () => {
+    byId('splash').hidden = true;
+    byId('sim').hidden = false;
+    modeButtons[0].focus();
+  });
+
+  function selectMode(next) {
+    mode = next;
+    const { factors, labels } = modeSettings[mode];
+    byId('factor-h').textContent = factors[0];
+    byId('factor-w').textContent = factors[1];
+    byId('label-h2').textContent = labels[0];
+    byId('label-w2').textContent = labels[1];
+    modeButtons.forEach(button => button.setAttribute('aria-pressed', button.dataset.mode === mode));
+    for (const option of options) byId('chk-' + option).checked = states[mode][option];
+    for (const row of document.querySelectorAll('[data-key]')) {
+      const label = byId('label-' + row.dataset.key).textContent;
+      for (const button of row.querySelectorAll('button')) {
+        const action = Number(button.dataset.delta) > 0 ? 'افزایش' : 'کاهش';
+        button.setAttribute('aria-label', action + ' ' + label);
+      }
+    }
+    draw();
+  }
+
+  modeButtons.forEach(button => button.addEventListener('click', () => selectMode(button.dataset.mode)));
+  for (const row of document.querySelectorAll('[data-key]')) {
+    const key = row.dataset.key;
+    for (const button of row.querySelectorAll('button')) {
+      button.addEventListener('click', () => {
+        const data = states[mode].coefficients;
+        data[key] = Math.max(0, Math.min(data[key] + Number(button.dataset.delta), 9));
+        draw();
+      });
+    }
+  }
+  for (const option of options) {
+    byId('chk-' + option).addEventListener('change', event => {
+      states[mode][option] = event.target.checked;
+      draw();
+    });
+  }
+  byId('reset').addEventListener('click', () => {
+    states[mode].coefficients = { ...defaults };
+    draw();
+  });
+
+  function term(coefficient, variable) {
+    if (!coefficient) return '';
+    return variable && coefficient === 1 ? variable : coefficient + variable;
+  }
+
+  function label(id, x, y, text, visible) {
+    const element = byId(id);
+    element.setAttribute('x', x);
+    element.setAttribute('y', y);
+    element.textContent = visible ? text : '';
+  }
+
+  function draw() {
+    const { coefficients, partial, total, dims } = states[mode];
+    const { h1, h2, w1, w2 } = coefficients;
+    const { second, middle, last } = modeSettings[mode];
+    for (const [key, value] of Object.entries(coefficients)) byId('disp-' + key).textContent = value;
+
+    const scale = Math.min(350 / (w1 + w2 || 1), 280 / (h1 + h2 || 1));
+    const [dw1, dw2, dh1, dh2] = [w1, w2, h1, h2].map(value => value * scale);
+    const left = (500 - dw1 - dw2) / 2;
+    const top = (400 - dh1 - dh2) / 2;
+    const rows = [[h1, 'x'], [h2, second]];
+    const columns = [[w1, 'x'], [w2, second]];
+    const products = [[h1*w1, 'x²'], [h1*w2, middle], [h2*w1, middle], [h2*w2, last]];
+    const cells = [
+      [left, top, dw1, dh1], [left + dw1, top, dw2, dh1],
+      [left, top + dh1, dw1, dh2], [left + dw1, top + dh1, dw2, dh2]
+    ];
+
+    const steps = [];
+    cells.forEach(([x, y, width, height], index) => {
+      const rect = byId('r' + (index + 1));
+      for (const [name, value] of Object.entries({ x, y, width, height })) rect.setAttribute(name, value);
+      const [value, variable] = products[index];
+      rect.style.display = value ? '' : 'none';
+      const product = term(value, variable);
+      label('l' + (index + 1), x + width / 2, y + height / 2 + 6, product, partial && value);
+      if (partial && value) {
+        steps.push(term(...rows[Math.floor(index / 2)]) + ' × ' + term(...columns[index % 2]) + ' = ' + product);
+      }
+    });
+
+    label('dt1', left + dw1 / 2, top - 10, term(...columns[0]), dims && w1);
+    label('dt2', left + dw1 + dw2 / 2, top - 10, term(...columns[1]), dims && w2);
+    label('ds1', left - 10, top + dh1 / 2 + 6, term(...rows[0]), dims && h1);
+    label('ds2', left - 10, top + dh1 + dh2 / 2 + 6, term(...rows[1]), dims && h2);
+
+    const factor = terms => terms.map(pair => term(...pair)).filter(Boolean).join(' + ') || '0';
+    const result = factor([products[0], [h1*w2 + h2*w1, middle], products[3]]);
+    const box = byId('math-box');
+    box.hidden = steps.length === 0 && !total;
+    box.replaceChildren();
+    for (const step of steps) {
+      const line = document.createElement('div');
+      line.className = 'step-line';
+      line.textContent = step;
+      box.append(line);
+    }
+    if (total) {
+      const line = document.createElement('div');
+      line.className = 'final-line';
+      line.textContent = '(' + factor(rows) + ') (' + factor(columns) + ') = ' + result;
+      box.append(line);
+    }
+  }
+
+  selectMode('one');
+</script>
+</body>
+</html>
